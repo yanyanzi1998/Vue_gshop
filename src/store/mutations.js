@@ -1,4 +1,4 @@
-// 直接更新state的多个方法的对象
+import Vue from 'vue'// 直接更新state的多个方法的对象
 import {
     RECEIVE_ADDRESS,
     RECEIVE_CATEGORYS,
@@ -8,6 +8,8 @@ import {
     RECEIVE_GOODS,
     RECEIVE_INFO,
     RECEIVE_RATINGS,
+    INCREMENT_FOOD_COUNT,
+    DECREMENT_FOOD_COUNT,
 } from './mutation-types'
 export default {
     [RECEIVE_ADDRESS](state, {
@@ -47,5 +49,30 @@ export default {
         ratings
     }) {
         state.ratings = ratings
-    }
+    },
+    [INCREMENT_FOOD_COUNT](state,{
+        food
+    }) {
+        if(!food.count){//第一次增加
+            //food.count = 1 //新增属性（没有数据绑定）
+            // 对象,属性名(字符串),属性值
+            Vue.set(food,'count',1)//让新增加的属性也有数据绑定
+            // 将food添加到cartFoods中
+            state.cartFoods.push(food)
+        }else{
+            food.count++
+        }
+    },
+    [DECREMENT_FOOD_COUNT](state,{
+        food
+    }) {
+        if(food.count){//有值才去--
+            food.count--
+            if(food.count === 0){
+                // 将food从cartFoods中移除
+                state.cartFoods.splice(state.cartFoods.indexOf(food),1)
+            }
+        }
+    },
+
 }

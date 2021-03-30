@@ -8,6 +8,8 @@ import {
     RECEIVE_GOODS,
     RECEIVE_INFO,
     RECEIVE_RATINGS,
+    INCREMENT_FOOD_COUNT,
+    DECREMENT_FOOD_COUNT,
 } from './mutation-types'
 import {
     reqAddress,
@@ -92,12 +94,23 @@ export default {
         }
     },
 
-    // 异步获取商品信息
-    async getShopGoods({commit}){
+    // 异步获取商家列表信息
+    async getShopGoods({commit},callback){
         const result = await reqShopGoods()
         if(result.code === 0){
             const goods = result.data
             commit(RECEIVE_GOODS,{goods})
+            // 此时数据更新，通知组件创建滑动
+            callback && callback()
+        }
+    },
+
+    // 同步更新food中的count值
+    updateFoodCount({commit},{isAdd,food}){
+        if(isAdd){
+            commit(INCREMENT_FOOD_COUNT,{food})
+        }else{
+            commit(DECREMENT_FOOD_COUNT,{food})
         }
     }
 }

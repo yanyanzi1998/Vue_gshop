@@ -4,16 +4,16 @@
         <shop-header/>
         <div class="tab">
             <div class="tab-item">
-                <router-link to="/shop/goods">点餐</router-link>
+                <router-link to="/shop/goods" >点餐</router-link>
             </div>
             <div class="tab-item">
-                <router-link to="/shop/ratings">评价</router-link>
+                <router-link to="/shop/ratings" >评价</router-link>
             </div>
             <div class="tab-item">
-                <router-link to="/shop/info">商家</router-link>
+                <router-link to="/shop/info" >商家</router-link>
             </div>
         </div>
-        <router-view/>
+        <router-view />
       </div>
   </div>
 </template>
@@ -38,6 +38,8 @@ export default {
         height 40px
         line-height 40px
         background #fff
+        position relative
+        z-index 10
         bottom-border-1px(rgba(7, 17, 27, 0.1))
         .tab-item
           float left
