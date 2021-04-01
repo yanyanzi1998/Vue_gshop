@@ -25,7 +25,7 @@ export const reqLogout = ()=>ajax(`${BASE_URL}/logout`)
 //以下是通过mock请求ajax获取数据的接口，不需要代理，即不需要前面加上接口/api
 // 11、获取商家信息
 export const reqShopInfo = ()=>ajax(`/info`)
-// 11、获取商家信息
+// 11、获取商家评价
 export const reqShopRatings = ()=>ajax(`/ratings`)
-// 11、获取商家信息
+// 11、获取商品
 export const reqShopGoods = ()=>ajax(`/goods`)

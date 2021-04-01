@@ -4,16 +4,20 @@
         <shop-header/>
         <div class="tab">
             <div class="tab-item">
-                <router-link to="/shop/goods" >点餐</router-link>
+              <!-- 使用replace实现路由跳转 -->
+                <router-link to="/shop/goods" replace>点餐</router-link>
             </div>
             <div class="tab-item">
-                <router-link to="/shop/ratings" >评价</router-link>
+                <router-link to="/shop/ratings" replace>评价</router-link>
             </div>
             <div class="tab-item">
-                <router-link to="/shop/info" >商家</router-link>
+                <router-link to="/shop/info" replace>商家</router-link>
             </div>
         </div>
-        <router-view />
+        <!-- 不使用缓存在切换路由时组件会重新加载，而购物车组件不会重新加载，造成购物车列表与列表的数量不一致 -->
+        <keep-alive>
+          <router-view />
+        </keep-alive>
       </div>
   </div>
 </template>

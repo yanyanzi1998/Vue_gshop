@@ -1,31 +1,76 @@
 <template>
   <section class="search">
-    <!-- <header class="header">
-      <a class="header_title">
-        <span class="header_title_text">搜索</span>
-      </a>
-    </header> -->
-    <header-top title="搜索"/>
-    <form class="search_form" action="#">
-      <input
-        type="search"
-        name="search"
-        placeholder="请输入商家或美食名称"
-        class="search_input"
-      />
-      <input type="submit" name="submit" class="search_submit" />
+    <HeaderTop title="搜索"/>
+    <form class="search_form" @submit.prevent="search">
+      <input type="search" placeholder="请输入商家名称" class="search_input" v-model="keyword">
+      <input type="submit" class="search_submit">
     </form>
+
+    <section class="list" v-if="!noSearchShops">
+      <ul class="list_container">
+        <!-- tag='li' 可以让router-link生成li -->
+        <!-- to="'/shop?id'+item.id" -->
+        <router-link class="list_li" :to="{path:'/shop',query:{id:item.id}}" tag="li" v-for="item in searchShops" :key="item.id">
+          <section class="item_left">
+            <img class="restaurant_img" :src="imgBaseUrl + item.image_path"/>
+          </section>
+          <section class="item_right">
+            <div class="item_right_text">
+              <p>
+                <span>{{item.name}}</span>
+              </p>
+              <p>月售 {{item.month_sales||item.recent_order_num}} 单</p>
+              <p>{{item.delivery_fee||item.float_minimum_order_amount}} 元起送 / 距离{{item.distance}}</p>
+            </div>
+          </section>
+        </router-link>
+      </ul>
+    </section>
+
+    <div class="search_none" v-else>很抱歉！无搜索结果</div>
   </section>
 </template>
 
 <script>
+import {mapState} from 'vuex'
 import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
 export default {
+  data(){
+    return{
+      keyword:'',
+      imgBaseUrl:'http://dangdu.org:8001/img/',
+      noSearchShops:false//默认有搜索结果
+    }
+  },
   components:{
     HeaderTop
+  },
+  methods:{
+    search(){
+      // 得到搜索关键字进行搜索
+      const keyword = this.keyword.trim()
+      // 进行搜索
+      if(keyword){
+        //this.noSearchShops = false;//默认有结果
+        this.$store.dispatch('searchShops',keyword)
+      }
+    }
+  },
+  watch:{
+    searchShops(value){
+      if(!value.length){//搜素没有结果
+        this.noSearchShops = true
+      }else{//搜素有结果
+        this.noSearchShops = false
+      }
+    }
+  },
+  computed:{
+    ...mapState(['searchShops'])
   }
 };
 </script>
+
 
 <style lang="stylus" rel="stylesheet/stylus" scoped>
   @import "../../common/stylus/mixins.styl"
@@ -34,27 +79,6 @@ export default {
     width 100%
     height 100%
     overflow hidden
-    .header
-      background-color #02a774
-      position fixed
-      z-index 100
-      left 0
-      top 0
-      width 100%
-      height 45px
-      .header_title
-        position absolute
-        top 50%
-        left 50%
-        transform translate(-50%, -50%)
-        width 50%
-        color #fff
-        text-align center
-        margin-left -5%
-        .header_title_text
-          font-size 20px
-          color #fff
-          display block
     .search_form
       clearFix()
       margin-top 45px
@@ -111,3 +135,4 @@ export default {
       text-align: center
       margin-top: 0.125rem
 </style>
+
